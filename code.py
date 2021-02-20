@@ -38,7 +38,7 @@ def div_100(x) :
 # Reemplazando valores erroneos con la función
 df_YPF["precio"] = [div_100(x) for x in df_YPF["precio"]]
 
-# Revisando corrección (requiere remover # de la línea 30)
+# Revisando corrección (requiere remover "#" de la línea 30)
 #print(df_YPF.loc[indiceError])
 
 df_YPF = df_YPF[["precio","fecha_vigencia"]]
