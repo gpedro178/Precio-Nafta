@@ -4,15 +4,15 @@ import datetime as dtime
 archivoCSV = pd.read_csv("Precio-Nafta/precios-historicos.csv")
 dataFrame = pd.DataFrame(archivoCSV)
 
-# Seleccionamos columnas útiles, filtramos por "YPF", modificamos la fecha para
-# no incluir hora y asignamos tipos de datos
+# Seleccionamos columnas útiles, filtramos por "YPF", asignamos tipos de datos 
+# y modificamos la fecha para no incluir hora 
 columnasUtiles = ["provincia","producto","precio","fecha_vigencia",
     "empresabandera"]
 dataFrame = dataFrame[columnasUtiles]
 df_YPF = dataFrame[dataFrame["empresabandera"] == "YPF"]
+df_YPF = df_YPF.convert_dtypes()
 df_YPF["fecha_vigencia"] = [fecha[0:10] for fecha \
     in df_YPF["fecha_vigencia"]]
-df_YPF = df_YPF.convert_dtypes()
 
 #print(df_YPF.info())
 #print(df_YPF.describe().apply(lambda s: s.apply('{0:.2f}'.format)))
@@ -33,6 +33,8 @@ df_YPF = df_YPF.convert_dtypes()
 def div_100(x) :
     if (x > 100) :
         return (x / 100)
+    else :
+        return x
 # Reemplazando valores erroneos con la función
 df_YPF["precio"] = [div_100(x) for x in df_YPF["precio"]]
 
