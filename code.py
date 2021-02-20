@@ -1,5 +1,6 @@
 import pandas as pd
 import datetime as dtime
+from datetime import datetime
 
 archivoCSV = pd.read_csv("Precio-Nafta/precios-historicos.csv")
 dataFrame = pd.DataFrame(archivoCSV)
@@ -42,3 +43,9 @@ df_YPF["precio"] = [div_100(x) for x in df_YPF["precio"]]
 #print(df_YPF.loc[indiceError])
 
 df_YPF = df_YPF[["precio","fecha_vigencia"]]
+
+# Traduciendo fecha para Python con datetime
+formatoFecha = "%d/%m/%Y"
+df_YPF["fecha_vigencia"] = [datetime.strptime(x, formatoFecha) for x \
+    in df_YPF["fecha_vigencia"]]
+print(df_YPF)
