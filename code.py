@@ -59,3 +59,24 @@ indiceErrorFechas = (df_YPF[ \
 
 df_YPF = df_YPF.drop(indiceErrorFechas)
 
+
+####### FOR LATER, serie de datos bastante mala
+
+#df_YPF = df_YPF[["precio","fecha_vigencia","producto","provincia"]]
+#df_YPF = df_YPF[df_YPF["producto"]=="Nafta (súper) entre 92 y 95 Ron"]
+#df_YPF = df_YPF[df_YPF["provincia"]=="CORDOBA"]
+#df_YPF = df_YPF[["precio","fecha_vigencia"]]
+# Traduciendo fecha para Python con to_datetime de Pandas
+#df_YPF["fecha_vigencia"] = pd.to_datetime(df_YPF["fecha_vigencia"])
+
+# Eliminando fechas inferiores a 2017-01-01 y superiores a 2021-02-15 
+#indiceErrorFechas = (df_YPF[ \
+#    (df_YPF["fecha_vigencia"] < "2017-01-01") | \
+#    (df_YPF["fecha_vigencia"] > "2021-02-15") \
+#        ]).index
+
+#df_YPF = df_YPF.drop(indiceErrorFechas)
+#df_YPF = df_YPF.groupby(["fecha_vigencia"]).max()
+#df_YPF = df_YPF.groupby(df_YPF["fecha_vigencia"].dt.to_period("m")).max()
+#print(df_YPF)
+#df_YPF.plot(x="fecha_vigencia", y="precio")
