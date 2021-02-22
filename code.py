@@ -7,7 +7,7 @@
 
 import pandas as pd
 
-archivoCSV = pd.read_csv("Precio-Nafta/precios-historicos.csv")
+archivoCSV = pd.read_csv("/home/gpedro/Curso_Python/Precio-Nafta/precios-historicos.csv")
 dataFrame = pd.DataFrame(archivoCSV)
 
 # Seleccionamos columnas útiles, filtramos por "YPF", asignamos tipos de datos 
@@ -79,4 +79,5 @@ df_YPF = df_YPF.drop(indiceErrorFechas)
 #df_YPF = df_YPF.groupby(["fecha_vigencia"]).max()
 #df_YPF = df_YPF.groupby(df_YPF["fecha_vigencia"].dt.to_period("m")).max()
 #print(df_YPF)
+
 #df_YPF.plot(x="fecha_vigencia", y="precio")
