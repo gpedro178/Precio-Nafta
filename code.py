@@ -29,29 +29,27 @@ df_YPF["fecha_vigencia"] = [fecha[0:10] for fecha \
 # .describe() con la función "max" mostró que hay uno o más valores anormales
 # en la columna "precios"
 
-# Buscando todos los valores anormales, en este caso cualquier valor "precio"
-# por encima de 100 se considera anormal
-#print(df_YPF[df_YPF["precio"] > 100])
-#indiceErrorPrecios = (df_YPF[df_YPF["precio"] > 100]).index
+#################
+# Buscando los Valores Anormales
+#################
 
-# Función para corregir el error decimal en la tabla
-def div_100(x) :
-    if (x > 100) :
-        return (x / 100)
-    else :
-        return x
-# Reemplazando valores erroneos con la función
-df_YPF["precio"] = [div_100(x) for x in df_YPF["precio"]]
+# En este caso cualquier valor "precio"
+# por encima de 100 o menor a 5 se considerará anormal
 
-# Revisando corrección (requiere remover "#" de la línea 35)
+indiceErrorPrecios = (df_YPF[ \
+    (df_YPF["precio"] > 100) | \
+    (df_YPF["precio"] < 5) \
+        ]).index
+
 #print(df_YPF.loc[indiceErrorPrecios])
 
-df_YPF = df_YPF[["precio","fecha_vigencia","producto"]]
+df_YPF = df_YPF.drop(indiceErrorPrecios)
 
 # Traduciendo fecha para Python con to_datetime de Pandas
 df_YPF["fecha_vigencia"] = pd.to_datetime(df_YPF["fecha_vigencia"])
 
-# Eliminando fechas inferiores a 2017-01-01 y superiores a 2021-02-15 
+# Eliminando fechas inferiores a 2017-01-01 y superiores a 2021-02-15 debido 
+# a que la serie no debería tener valores en esos rangos.
 indiceErrorFechas = (df_YPF[ \
     (df_YPF["fecha_vigencia"] < "2017-01-01") | \
     (df_YPF["fecha_vigencia"] > "2021-02-15") \
@@ -59,6 +57,26 @@ indiceErrorFechas = (df_YPF[ \
 
 df_YPF = df_YPF.drop(indiceErrorFechas)
 
+###########
+# Experimento tiempo
+###########
+
+import pandas as pd
+#dt1 = pd.to_datetime("2017-01")
+#dt2 = pd.to_datetime("2021-02")
+#print(dt2-dt1)
+dt4 = pd.date_range(start="2017-01",end="2017-03",freq="MS",closed="left")
+#print(dt4)
+dt3 = [(pd.date_range(start=fecha,periods=1,freq="D")) for fecha in dt4]
+#print(dt3)
+dt5 = [item for sublist in dt3 for item in sublist]
+print(dt5)
+dt6= dt5[0]
+print(dt6)
+print(dt4-dt6)
+#start_date = datetime.date(2019, 9 , 30)
+#number_of_days = 12
+#date_list = [(start_date + datetime.timedelta(days = day)).isoformat() for day in range(number_of_days)]
 
 ####### FOR LATER, serie de datos bastante mala
 
