@@ -57,26 +57,18 @@ indiceErrorFechas = (df_YPF[ \
 
 df_YPF = df_YPF.drop(indiceErrorFechas)
 
-###########
-# Experimento tiempo
-###########
+# Aparentemente hay estaciones de servicio usando el formato dd-mm-yyyy y hay
+# otras utilizando el formato mm-dd-yyyy, lo que causa errores en la serie, 
+# voy a eliminar los primeros 12 días para corregir este problema.
 
-import pandas as pd
-#dt1 = pd.to_datetime("2017-01")
-#dt2 = pd.to_datetime("2021-02")
-#print(dt2-dt1)
-dt4 = pd.date_range(start="2017-01",end="2017-03",freq="MS",closed="left")
-#print(dt4)
-dt3 = [(pd.date_range(start=fecha,periods=1,freq="D")) for fecha in dt4]
-#print(dt3)
-dt5 = [item for sublist in dt3 for item in sublist]
-print(dt5)
-dt6= dt5[0]
-print(dt6)
-print(dt4-dt6)
-#start_date = datetime.date(2019, 9 , 30)
-#number_of_days = 12
-#date_list = [(start_date + datetime.timedelta(days = day)).isoformat() for day in range(number_of_days)]
+auxiliarFechas = pd.date_range(start="2017-01",end="2021-03",freq="D",closed="left")
+listaFechasParaBorrar = []
+for dia in auxiliarFechas:
+    if dia.day <= 12:
+        listaFechasParaBorrar.append(dia)
+
+df_YPF = df_YPF.drop(listaFechasParaBorrar)
+
 
 ####### FOR LATER, serie de datos bastante mala
 
