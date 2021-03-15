@@ -4,7 +4,7 @@
 # con el objetivo de determinar un índice de inflación.
 # El dataset empleado tiene fecha de actualización 15/02/2021.
 ###############
-
+#%%
 import pandas as pd
 
 archivoCSV = pd.read_csv("/home/gpedro/Curso_Python/Precio-Nafta/precios-historicos.csv")
@@ -59,35 +59,33 @@ df_YPF = df_YPF.drop(indiceErrorFechas)
 
 # Aparentemente hay estaciones de servicio usando el formato dd-mm-yyyy y hay
 # otras utilizando el formato mm-dd-yyyy, lo que causa errores en la serie, 
-# voy a eliminar los primeros 12 días para corregir este problema.
+# se eliminarán los primeros 12 días para corregir este problema.
 
 auxiliarFechas = pd.date_range(start="2017-01",end="2021-03",freq="D",closed="left")
+
 listaFechasParaBorrar = []
 for dia in auxiliarFechas:
     if dia.day <= 12:
         listaFechasParaBorrar.append(dia)
 
-df_YPF = df_YPF.drop(listaFechasParaBorrar)
+listaFechasParaBorrar = pd.to_datetime(listaFechasParaBorrar)
 
+indiceFechasParaBorrar = (df_YPF[df_YPF["fecha_vigencia"].isin(listaFechasParaBorrar)]).index
 
-####### FOR LATER, serie de datos bastante mala
+df_YPF = df_YPF.drop(indiceFechasParaBorrar)
 
-#df_YPF = df_YPF[["precio","fecha_vigencia","producto","provincia"]]
-#df_YPF = df_YPF[df_YPF["producto"]=="Nafta (súper) entre 92 y 95 Ron"]
-#df_YPF = df_YPF[df_YPF["provincia"]=="CORDOBA"]
-#df_YPF = df_YPF[["precio","fecha_vigencia"]]
-# Traduciendo fecha para Python con to_datetime de Pandas
-#df_YPF["fecha_vigencia"] = pd.to_datetime(df_YPF["fecha_vigencia"])
+# Filtramos por Nafta Súper y por Prov de BS AS
+df_YPF = df_YPF[["precio","fecha_vigencia","producto","provincia"]]
+df_YPF_NS = df_YPF[df_YPF["producto"]=="Nafta (súper) entre 92 y 95 Ron"]
+df_YPF_NS_BSAS = df_YPF_NS[df_YPF_NS["provincia"]=="BUENOS AIRES"]
 
-# Eliminando fechas inferiores a 2017-01-01 y superiores a 2021-02-15 
-#indiceErrorFechas = (df_YPF[ \
-#    (df_YPF["fecha_vigencia"] < "2017-01-01") | \
-#    (df_YPF["fecha_vigencia"] > "2021-02-15") \
-#        ]).index
+# Tomamos solo columnas precio y fecha
+df_YPF_NS_BSAS = df_YPF_NS_BSAS[["precio","fecha_vigencia"]]
 
-#df_YPF = df_YPF.drop(indiceErrorFechas)
-#df_YPF = df_YPF.groupby(["fecha_vigencia"]).max()
-#df_YPF = df_YPF.groupby(df_YPF["fecha_vigencia"].dt.to_period("m")).max()
-#print(df_YPF)
+# Agrupamos precios por fechas tomando el máximo de cada fecha para intentar 
+# disminuir el error de carga de datos de las estaciones de servicio
+df_YPF_NS_BSAS = df_YPF_NS_BSAS.groupby(["fecha_vigencia"]).max()
 
-#df_YPF.plot(x="fecha_vigencia", y="precio")
+#print(df_YPF_NS_BSAS)
+# Gráfico preliminar de la serie
+df_YPF_NS_BSAS.plot()
