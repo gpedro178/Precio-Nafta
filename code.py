@@ -4,8 +4,10 @@
 # con el objetivo de determinar un índice de inflación.
 # El dataset empleado tiene fecha de actualización 15/02/2021.
 ###############
-#%%
+
 import pandas as pd
+import matplotlib.pyplot as plt
+import numpy as np
 
 archivoCSV = pd.read_csv("/home/gpedro/Curso_Python/Precio-Nafta/precios-historicos.csv")
 dataFrame = pd.DataFrame(archivoCSV)
@@ -70,7 +72,9 @@ for dia in auxiliarFechas:
 
 listaFechasParaBorrar = pd.to_datetime(listaFechasParaBorrar)
 
-indiceFechasParaBorrar = (df_YPF[df_YPF["fecha_vigencia"].isin(listaFechasParaBorrar)]).index
+indiceFechasParaBorrar = (df_YPF[df_YPF["fecha_vigencia"]\
+    .isin(listaFechasParaBorrar)\
+        ]).index
 
 df_YPF = df_YPF.drop(indiceFechasParaBorrar)
 
@@ -87,5 +91,19 @@ df_YPF_NS_BSAS = df_YPF_NS_BSAS[["precio","fecha_vigencia"]]
 df_YPF_NS_BSAS = df_YPF_NS_BSAS.groupby(["fecha_vigencia"]).max()
 
 #print(df_YPF_NS_BSAS)
+
 # Gráfico preliminar de la serie
 df_YPF_NS_BSAS.plot()
+
+# Gráfico con nuevo formato
+plt.style.use("bmh")
+
+fig, axs = plt.subplots(figsize=(12, 4))
+
+df_YPF_NS_BSAS.plot.line(ax=axs, marker=".")
+
+axs.set_ylabel("Precio por Litro")
+axs.set_xlabel("Fecha de Lectura")
+axs.set_title("Nafta Súper YPF", fontsize=18)
+
+plt.show()
