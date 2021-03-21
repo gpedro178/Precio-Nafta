@@ -7,7 +7,6 @@
 
 import pandas as pd
 import matplotlib.pyplot as plt
-import numpy as np
 
 archivoCSV = pd.read_csv("/home/gpedro/Curso_Python/Precio-Nafta/precios-historicos.csv")
 dataFrame = pd.DataFrame(archivoCSV)
@@ -21,6 +20,9 @@ df_YPF = dataFrame[dataFrame["empresabandera"] == "YPF"]
 df_YPF = df_YPF.convert_dtypes()
 df_YPF["fecha_vigencia"] = [fecha[0:10] for fecha \
     in df_YPF["fecha_vigencia"]]
+
+# Creando un .CSV menos pesado para subir a Repl.it
+#df_YPF.to_csv("data_Reducida.csv",index=False)
 
 #print(df_YPF.info())
 #print(df_YPF.describe().apply(lambda s: s.apply('{0:.2f}'.format)))
@@ -98,9 +100,9 @@ df_YPF_NS_BSAS.plot()
 # Gráfico con nuevo formato
 plt.style.use("bmh")
 
-fig, axs = plt.subplots(figsize=(12, 4))
+fig, axs = plt.subplots(figsize=(10, 4))
 
-df_YPF_NS_BSAS.plot.line(ax=axs, marker=".")
+df_YPF_NS_BSAS.plot.line(ax=axs, lw=1)
 
 axs.set_ylabel("Precio por Litro")
 axs.set_xlabel("Fecha de Lectura")
